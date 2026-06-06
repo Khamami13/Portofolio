@@ -1,7 +1,16 @@
 "use client";
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
-import { FolderOpen, Leaf, Network, Bot, Server, Zap, ExternalLink, Github } from "lucide-react";
+import {
+  FolderOpen,
+  Leaf,
+  Network,
+  Bot,
+  Server,
+  Zap,
+  ExternalLink,
+  Github,
+} from "lucide-react";
 import { useLang } from "@/lib/lang-context";
 import { content } from "@/lib/content";
 
@@ -30,7 +39,10 @@ export default function ProjectsSection() {
   const inView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <section id="projects" className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <section
+      id="projects"
+      className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto"
+    >
       <div ref={ref}>
         {/* Header */}
         <motion.div
@@ -49,7 +61,9 @@ export default function ProjectsSection() {
           <h2 className="section-title font-display text-3xl sm:text-4xl font-bold text-white">
             {t.projects.title}
           </h2>
-          <p className="text-gray-500 mt-3 text-sm max-w-lg">{t.projects.subtitle}</p>
+          <p className="text-gray-500 mt-3 text-sm max-w-lg">
+            {t.projects.subtitle}
+          </p>
         </motion.div>
 
         {/* Projects grid */}
@@ -67,7 +81,9 @@ export default function ProjectsSection() {
                 <div className="w-10 h-10 rounded-lg border border-emerald-500/20 bg-emerald-500/5 flex items-center justify-center text-emerald-400 group-hover:border-emerald-500/50 transition-all">
                   {iconMap[project.icon]}
                 </div>
-                <span className={`text-[10px] font-mono px-2 py-1 rounded-full ${statusClass[project.status] ?? "status-ongoing"}`}>
+                <span
+                  className={`text-[10px] font-mono px-2 py-1 rounded-full ${statusClass[project.status] ?? "status-ongoing"}`}
+                >
                   {project.status}
                 </span>
               </div>
@@ -85,20 +101,24 @@ export default function ProjectsSection() {
               {/* Highlight */}
               <div className="flex items-center gap-2 bg-emerald-500/5 border border-emerald-500/10 rounded-lg px-3 py-2">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 flex-shrink-0" />
-                <span className="text-emerald-400/80 text-[11px] font-mono">{project.highlight}</span>
+                <span className="text-emerald-400/80 text-[11px] font-mono">
+                  {project.highlight}
+                </span>
               </div>
 
               {/* Tags */}
               <div className="flex flex-wrap gap-1.5">
                 {project.tags.map((tag) => (
-                  <span key={tag} className="tag text-[10px]">{tag}</span>
+                  <span key={tag} className="tag text-[10px]">
+                    {tag}
+                  </span>
                 ))}
               </div>
 
               {/* Actions */}
               <div className="flex items-center gap-3 mt-auto pt-2 border-t border-emerald-500/10">
                 <a
-                  href={`https://github.com/rizqikhamami/${project.id}`}
+                  href={`https://github.com/Khamami13/${project.id}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-1.5 text-xs text-gray-500 hover:text-emerald-400 transition-colors"
@@ -107,7 +127,7 @@ export default function ProjectsSection() {
                   GitHub
                 </a>
                 <a
-                  href={`https://github.com/rizqikhamami/${project.id}`}
+                  href={`https://github.com/Khamami13/${project.id}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-1.5 text-xs text-gray-500 hover:text-emerald-400 transition-colors ml-auto"
@@ -128,7 +148,7 @@ export default function ProjectsSection() {
           className="text-center mt-10"
         >
           <a
-            href="https://github.com/rizqikhamami"
+            href="https://github.com/Khamami13"
             target="_blank"
             rel="noopener noreferrer"
             className="btn-outline inline-flex items-center gap-2 text-sm"
