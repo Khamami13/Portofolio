@@ -10,9 +10,17 @@ function isValidEmail(email: string): boolean {
 
 export async function POST(req: NextRequest) {
   try {
-    await initDb();
-    const sql = getDb();
+    // ===== 1. VALIDATE JWT_SECRET FIRST (before any DB writes) =====
+    // This prevents the bug where user is inserted but token creation fails
+    if (!process.env.JWT_SECRET || process.env.JWT_SECRET.length < 32) {
+      console.error("Register error: JWT_SECRET is missing or too short (min 32 chars)");
+      return NextResponse.json(
+        { error: "Server configuration error. Hubungi administrator." },
+        { status: 500 }
+      );
+    }
 
+    // ===== 2. PARSE & VALIDATE INPUT =====
     let body;
     try {
       body = await req.json();
@@ -36,7 +44,8 @@ export async function POST(req: NextRequest) {
     }
 
     // Validate email format
-    if (!isValidEmail(email.trim())) {
+    const sanitizedEmail = email.trim().toLowerCase();
+    if (!isValidEmail(sanitizedEmail)) {
       return NextResponse.json(
         { error: "Format email tidak valid" },
         { status: 400 }
@@ -66,7 +75,12 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const sanitizedEmail = email.trim().toLowerCase();
+    // ===== 3. PRE-COMPUTE EXPENSIVE OPERATIONS =====
+    const passwordHash = await bcrypt.hash(password, 12);
+
+    // ===== 4. DATABASE OPERATIONS =====
+    await initDb();
+    const sql = getDb();
 
     // Check if user exists
     const existing = await sql`SELECT id FROM cv_users WHERE email = ${sanitizedEmail}`;
@@ -77,8 +91,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const passwordHash = await bcrypt.hash(password, 12);
-
+    // Insert user
     const result = await sql`
       INSERT INTO cv_users (email, password_hash, name) 
       VALUES (${sanitizedEmail}, ${passwordHash}, ${trimmedName})
@@ -86,18 +99,37 @@ export async function POST(req: NextRequest) {
     `;
 
     const user = result[0];
-    const token = await createToken({
-      id: user.id as number,
-      email: user.email as string,
-      name: user.name as string,
-    });
 
-    // Create empty CV data
-    await sql`
-      INSERT INTO cv_data (user_id, data) 
-      VALUES (${user.id}, ${JSON.stringify({})}::jsonb)
-    `;
+    // ===== 5. CREATE TOKEN (JWT_SECRET already validated above) =====
+    let token: string;
+    try {
+      token = await createToken({
+        id: user.id as number,
+        email: user.email as string,
+        name: user.name as string,
+      });
+    } catch (tokenError) {
+      // Token creation failed after user insert — rollback user
+      console.error("Token creation failed, rolling back user:", tokenError);
+      await sql`DELETE FROM cv_users WHERE id = ${user.id}`;
+      return NextResponse.json(
+        { error: "Gagal membuat sesi. Silakan coba lagi." },
+        { status: 500 }
+      );
+    }
 
+    // ===== 6. CREATE CV DATA =====
+    try {
+      await sql`
+        INSERT INTO cv_data (user_id, data) 
+        VALUES (${user.id}, ${JSON.stringify({})}::jsonb)
+      `;
+    } catch (cvError) {
+      // Non-critical: CV data can be created later on first save
+      console.error("Failed to create initial CV data:", cvError);
+    }
+
+    // ===== 7. RETURN RESPONSE WITH COOKIE =====
     const response = NextResponse.json({
       user: { id: user.id, email: user.email, name: user.name },
     });

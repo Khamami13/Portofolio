@@ -5,8 +5,14 @@ import bcrypt from "bcryptjs";
 
 export async function POST(req: NextRequest) {
   try {
-    await initDb();
-    const sql = getDb();
+    // Validate JWT_SECRET upfront before any processing
+    if (!process.env.JWT_SECRET || process.env.JWT_SECRET.length < 32) {
+      console.error("Login error: JWT_SECRET is missing or too short (min 32 chars)");
+      return NextResponse.json(
+        { error: "Server configuration error. Hubungi administrator." },
+        { status: 500 }
+      );
+    }
 
     let body;
     try {
@@ -29,6 +35,9 @@ export async function POST(req: NextRequest) {
     }
 
     const sanitizedEmail = email.trim().toLowerCase();
+
+    await initDb();
+    const sql = getDb();
 
     const users = await sql`
       SELECT id, email, name, password_hash FROM cv_users WHERE email = ${sanitizedEmail}

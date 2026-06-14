@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   FileText, Save, Download, LogOut, Terminal,
   Loader2, CheckCircle, AlertCircle, Eye, EyeOff,
+  Lock, ArrowLeft,
 } from "lucide-react";
 import type { CVData, TemplateType } from "@/lib/cv-types";
 import { defaultCVData } from "@/lib/cv-types";
@@ -28,7 +29,7 @@ export default function CVBuilderPage() {
 
   const isId = lang === "id";
 
-  // Check auth
+  // Check auth on mount
   useEffect(() => {
     fetch("/api/auth/me").then(r => r.json()).then(d => {
       if (d.user) setUser(d.user);
@@ -48,7 +49,6 @@ export default function CVBuilderPage() {
   }, [user]);
 
   const handleSave = async () => {
-    if (!user) { setShowLogin(true); return; }
     setSaving(true);
     setSaveMsg(null);
     try {
@@ -85,7 +85,6 @@ export default function CVBuilderPage() {
 
   const handleAIGenerate = () => {
     setAiLoading(true);
-    // Simulate AI generation by enhancing portfolio data
     setTimeout(() => {
       const portfolio = getPortfolioData(lang);
       const enhanced: CVData = {
@@ -107,6 +106,7 @@ export default function CVBuilderPage() {
     setCvData(prev => ({...prev, language: newLang}));
   };
 
+  // ===== LOADING STATE =====
   if (loading) {
     return (
       <div className="min-h-screen bg-[#030712] flex items-center justify-center">
@@ -115,6 +115,71 @@ export default function CVBuilderPage() {
     );
   }
 
+  // ===== NOT LOGGED IN — SHOW LOGIN GATE =====
+  if (!user) {
+    return (
+      <main className="min-h-screen bg-[#030712] relative flex items-center justify-center">
+        {/* Background */}
+        <div className="fixed inset-0 bg-grid opacity-100 pointer-events-none" />
+        <div className="fixed inset-0 pointer-events-none">
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[600px] rounded-full bg-emerald-500/5 blur-3xl" />
+        </div>
+
+        <div className="relative z-10 w-full max-w-md mx-auto px-4">
+          {/* Header */}
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center mb-8"
+          >
+            <div className="inline-flex items-center gap-2 mb-4">
+              <div className="w-10 h-10 rounded-lg border border-emerald-500/40 flex items-center justify-center bg-emerald-500/10">
+                <FileText size={20} className="text-emerald-400" />
+              </div>
+            </div>
+            <h1 className="font-display text-2xl font-bold text-white mb-2">CV Builder</h1>
+            <p className="text-sm text-gray-400">
+              {isId ? "Masuk untuk membuat dan mengelola CV profesional kamu" : "Sign in to create and manage your professional CV"}
+            </p>
+          </motion.div>
+
+          {/* Login/Register Card */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+          >
+            <LoginModal
+              lang={lang}
+              onLogin={u => setUser(u)}
+              onClose={() => {}}
+              embedded={true}
+            />
+          </motion.div>
+
+          {/* Language toggle + Back link */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.2 }}
+            className="mt-6 flex items-center justify-between"
+          >
+            <a href="/" className="flex items-center gap-1.5 text-xs text-gray-500 hover:text-emerald-400 transition-colors">
+              <ArrowLeft size={14} />
+              {isId ? "Kembali ke Portfolio" : "Back to Portfolio"}
+            </a>
+            <button onClick={()=>updateLang(lang==="id"?"en":"id")} className="flex items-center gap-1 font-mono text-xs border border-emerald-500/30 rounded px-2.5 py-1 text-emerald-400 hover:border-emerald-500 hover:bg-emerald-500/10 transition-all">
+              <span className={lang==="id"?"text-emerald-300":"text-gray-500"}>ID</span>
+              <span className="text-gray-600 mx-0.5">/</span>
+              <span className={lang==="en"?"text-emerald-300":"text-gray-500"}>EN</span>
+            </button>
+          </motion.div>
+        </div>
+      </main>
+    );
+  }
+
+  // ===== LOGGED IN — SHOW EDITOR =====
   return (
     <main className="min-h-screen bg-[#030712] relative">
       {/* Background */}
@@ -167,15 +232,11 @@ export default function CVBuilderPage() {
               <Download size={14}/>{isId?"Ekspor PDF":"Export PDF"}
             </button>
 
-            {/* Auth */}
-            {user ? (
-              <div className="flex items-center gap-2">
-                <span className="text-xs text-gray-500 hidden md:inline">{user.name}</span>
-                <button onClick={handleLogout} className="text-gray-500 hover:text-red-400 transition-colors p-1"><LogOut size={16}/></button>
-              </div>
-            ) : (
-              <button onClick={()=>setShowLogin(true)} className="text-xs text-gray-400 hover:text-emerald-400 transition-colors">{isId?"Masuk":"Login"}</button>
-            )}
+            {/* User info + logout */}
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-gray-500 hidden md:inline">{user.name}</span>
+              <button onClick={handleLogout} className="text-gray-500 hover:text-red-400 transition-colors p-1"><LogOut size={16}/></button>
+            </div>
           </div>
         </div>
 
@@ -216,9 +277,6 @@ export default function CVBuilderPage() {
           )}
         </div>
       </div>
-
-      {/* Login Modal */}
-      {showLogin && <LoginModal lang={lang} onLogin={u=>{setUser(u);setShowLogin(false)}} onClose={()=>setShowLogin(false)} />}
     </main>
   );
 }
