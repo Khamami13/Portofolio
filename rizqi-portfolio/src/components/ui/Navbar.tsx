@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Terminal, Download } from "lucide-react";
+import { Menu, X, Terminal, FileText } from "lucide-react";
 import { useLang } from "@/lib/lang-context";
 import { content } from "@/lib/content";
 
@@ -76,14 +76,13 @@ export default function Navbar() {
                 <span className={lang === "en" ? "text-emerald-300" : "text-gray-500"}>EN</span>
               </button>
 
-              {/* CV Button */}
+              {/* CV Builder Button */}
               <a
-                href="/cv-rizqi-khamami.pdf"
-                download
+                href="/cv-builder"
                 className="hidden md:flex items-center gap-1.5 text-xs font-semibold btn-primary"
               >
-                <Download size={12} />
-                {t.hero.cta_cv}
+                <FileText size={12} />
+                CV Builder
               </a>
 
               {/* Mobile menu toggle */}
@@ -120,12 +119,11 @@ export default function Navbar() {
                 </a>
               ))}
               <a
-                href="/cv-rizqi-khamami.pdf"
-                download
+                href="/cv-builder"
                 className="flex items-center justify-center gap-1.5 btn-primary text-sm"
               >
-                <Download size={14} />
-                {t.hero.cta_cv}
+                <FileText size={14} />
+                CV Builder
               </a>
             </div>
           </motion.div>

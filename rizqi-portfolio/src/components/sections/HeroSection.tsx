@@ -6,6 +6,7 @@ import {
   Github,
   Linkedin,
   Download,
+  FileText,
   Cpu,
   Bot,
   Terminal,
@@ -154,12 +155,11 @@ export default function HeroSection() {
             {t.hero.cta_contact}
           </a>
           <a
-            href="/cv-rizqi-khamami.pdf"
-            download
+            href="/cv-builder"
             className="flex items-center gap-2 text-sm text-gray-400 hover:text-emerald-400 transition-colors font-medium"
           >
-            <Download size={14} />
-            {t.hero.cta_cv}
+            <FileText size={14} />
+            CV Builder
           </a>
         </motion.div>
 
