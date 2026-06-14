@@ -11,6 +11,11 @@ import {
   ExternalLink,
 } from "lucide-react";
 
+// Helper to shorten URLs for display
+function shortUrl(url: string): string {
+  return url.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "");
+}
+
 interface Props {
   data: CVData;
 }
@@ -45,22 +50,27 @@ export default function ModernTemplate({ data }: Props) {
               <MapPin size={13} /> {profile.location}
             </span>
           )}
-          {profile.linkedin && (
-            <span className="flex items-center gap-1">
-              <Linkedin size={13} /> LinkedIn
-            </span>
-          )}
-          {profile.github && (
-            <span className="flex items-center gap-1">
-              <Github size={13} /> GitHub
-            </span>
-          )}
-          {profile.website && (
-            <span className="flex items-center gap-1">
-              <Globe size={13} /> Portfolio
-            </span>
-          )}
         </div>
+        {/* Social links with URLs */}
+        {(profile.linkedin || profile.github || profile.website) && (
+          <div className="flex flex-wrap gap-x-5 gap-y-1 mt-2 text-xs text-emerald-100">
+            {profile.linkedin && (
+              <span className="flex items-center gap-1">
+                <Linkedin size={12} /> {shortUrl(profile.linkedin)}
+              </span>
+            )}
+            {profile.github && (
+              <span className="flex items-center gap-1">
+                <Github size={12} /> {shortUrl(profile.github)}
+              </span>
+            )}
+            {profile.website && (
+              <span className="flex items-center gap-1">
+                <Globe size={12} /> {shortUrl(profile.website)}
+              </span>
+            )}
+          </div>
+        )}
       </div>
 
       <div className="px-8 py-6 space-y-6">

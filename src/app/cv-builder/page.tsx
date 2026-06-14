@@ -71,15 +71,44 @@ export default function CVBuilderPage() {
 
   const handleExportPDF = async () => {
     if (!previewRef.current) return;
+    const el = previewRef.current;
     const html2canvas = (await import("html2canvas")).default;
     const { jsPDF } = await import("jspdf");
-    const canvas = await html2canvas(previewRef.current, { scale: 2, useCORS: true, backgroundColor: "#ffffff" });
-    const imgData = canvas.toDataURL("image/png");
+
+    // Temporarily remove transform scale for accurate full-size capture
+    const origTransform = el.style.transform;
+    el.style.transform = "none";
+
+    // Capture at 2x for crisp output
+    const canvas = await html2canvas(el, {
+      scale: 2,
+      useCORS: true,
+      backgroundColor: "#ffffff",
+      width: 794,  // A4 width at 96dpi
+    });
+
+    // Restore preview scale
+    el.style.transform = origTransform;
+
+    // Create A4 PDF
     const pdf = new jsPDF("p", "mm", "a4");
-    const pw = pdf.internal.pageSize.getWidth();
-    const ph = pdf.internal.pageSize.getHeight();
-    const ratio = Math.min(pw / canvas.width, ph / canvas.height);
-    pdf.addImage(imgData, "PNG", 0, 0, canvas.width * ratio, canvas.height * ratio);
+    const a4W = 210;
+    const a4H = 297;
+    const imgW = a4W;
+    const imgH = (canvas.height * a4W) / canvas.width;
+
+    if (imgH <= a4H) {
+      // Single page
+      pdf.addImage(canvas.toDataURL("image/png"), "PNG", 0, 0, imgW, imgH);
+    } else {
+      // Multi-page: position the full image with negative Y offset per page
+      const totalPages = Math.ceil(imgH / a4H);
+      for (let page = 0; page < totalPages; page++) {
+        if (page > 0) pdf.addPage();
+        pdf.addImage(canvas.toDataURL("image/png"), "PNG", 0, -(page * a4H), imgW, imgH);
+      }
+    }
+
     pdf.save(`CV-${cvData.profile.fullName || "Untitled"}.pdf`);
   };
 

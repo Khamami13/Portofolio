@@ -11,6 +11,10 @@ import {
   ExternalLink,
 } from "lucide-react";
 
+function shortUrl(url: string): string {
+  return url.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "");
+}
+
 interface Props {
   data: CVData;
 }
@@ -45,22 +49,27 @@ export default function ClassicTemplate({ data }: Props) {
               <MapPin size={11} /> {profile.location}
             </span>
           )}
-          {profile.linkedin && (
-            <span className="flex items-center gap-1">
-              <Linkedin size={11} /> LinkedIn
-            </span>
-          )}
-          {profile.github && (
-            <span className="flex items-center gap-1">
-              <Github size={11} /> GitHub
-            </span>
-          )}
-          {profile.website && (
-            <span className="flex items-center gap-1">
-              <Globe size={11} /> Portfolio
-            </span>
-          )}
         </div>
+        {/* Social links with URLs */}
+        {(profile.linkedin || profile.github || profile.website) && (
+          <div className="flex flex-wrap justify-center gap-x-4 gap-y-1 mt-1.5 text-[11px] text-gray-500">
+            {profile.linkedin && (
+              <span className="flex items-center gap-1">
+                <Linkedin size={10} /> {shortUrl(profile.linkedin)}
+              </span>
+            )}
+            {profile.github && (
+              <span className="flex items-center gap-1">
+                <Github size={10} /> {shortUrl(profile.github)}
+              </span>
+            )}
+            {profile.website && (
+              <span className="flex items-center gap-1">
+                <Globe size={10} /> {shortUrl(profile.website)}
+              </span>
+            )}
+          </div>
+        )}
       </div>
 
       <div className="px-8 py-5 space-y-5">

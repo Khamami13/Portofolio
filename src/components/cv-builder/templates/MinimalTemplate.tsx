@@ -10,6 +10,10 @@ import {
   ExternalLink,
 } from "lucide-react";
 
+function shortUrl(url: string): string {
+  return url.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "");
+}
+
 interface Props {
   data: CVData;
 }
@@ -39,8 +43,8 @@ export default function MinimalTemplate({ data }: Props) {
               {isId ? "Kontak" : "Contact"}
             </h3>
             {profile.email && (
-              <div className="flex items-center gap-1.5 text-[11px] text-gray-600">
-                <Mail size={10} className="text-gray-400 flex-shrink-0" />
+              <div className="flex items-start gap-1.5 text-[11px] text-gray-600">
+                <Mail size={10} className="text-gray-400 flex-shrink-0 mt-0.5" />
                 <span className="break-all">{profile.email}</span>
               </div>
             )}
@@ -56,25 +60,34 @@ export default function MinimalTemplate({ data }: Props) {
                 {profile.location}
               </div>
             )}
-            {profile.linkedin && (
-              <div className="flex items-center gap-1.5 text-[11px] text-gray-600">
-                <Linkedin size={10} className="text-gray-400" />
-                LinkedIn
-              </div>
-            )}
-            {profile.github && (
-              <div className="flex items-center gap-1.5 text-[11px] text-gray-600">
-                <Github size={10} className="text-gray-400" />
-                GitHub
-              </div>
-            )}
-            {profile.website && (
-              <div className="flex items-center gap-1.5 text-[11px] text-gray-600">
-                <Globe size={10} className="text-gray-400" />
-                Portfolio
-              </div>
-            )}
           </div>
+
+          {/* Social Links with URLs */}
+          {(profile.linkedin || profile.github || profile.website) && (
+            <div className="space-y-1.5">
+              <h3 className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1">
+                Links
+              </h3>
+              {profile.linkedin && (
+                <div className="flex items-start gap-1.5 text-[11px] text-gray-600">
+                  <Linkedin size={10} className="text-gray-400 flex-shrink-0 mt-0.5" />
+                  <span className="break-all leading-tight">{shortUrl(profile.linkedin)}</span>
+                </div>
+              )}
+              {profile.github && (
+                <div className="flex items-start gap-1.5 text-[11px] text-gray-600">
+                  <Github size={10} className="text-gray-400 flex-shrink-0 mt-0.5" />
+                  <span className="break-all leading-tight">{shortUrl(profile.github)}</span>
+                </div>
+              )}
+              {profile.website && (
+                <div className="flex items-start gap-1.5 text-[11px] text-gray-600">
+                  <Globe size={10} className="text-gray-400 flex-shrink-0 mt-0.5" />
+                  <span className="break-all leading-tight">{shortUrl(profile.website)}</span>
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Skills */}
           {skillCategories.length > 0 && (

@@ -20,20 +20,17 @@ export default function CVPreview({ data, template, previewRef }: Props) {
   };
 
   return (
-    <div className="sticky top-20">
-      <div
-        ref={previewRef}
-        className="bg-white rounded-lg shadow-2xl overflow-hidden"
-        style={{
-          width: "210mm",
-          minHeight: "297mm",
-          maxWidth: "100%",
-          transform: "scale(0.55)",
-          transformOrigin: "top left",
-        }}
-      >
-        {renderTemplate()}
-      </div>
+    <div
+      ref={previewRef}
+      className="bg-white rounded-lg shadow-2xl overflow-hidden"
+      style={{
+        width: "794px",    /* A4 at 96dpi: 210mm = 794px */
+        minHeight: "1123px", /* A4 at 96dpi: 297mm = 1123px */
+        transform: "scale(0.52)",
+        transformOrigin: "top left",
+      }}
+    >
+      {renderTemplate()}
     </div>
   );
 }
