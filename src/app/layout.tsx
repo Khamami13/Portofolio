@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     "Pentest",
     "Portfolio",
   ],
-  authors: [{ name: "Rizqi Khamami", url: "https://github.com/rizqikhamami" }],
+  authors: [{ name: "Rizqi Khamami", url: "https://github.com/Khamami13" }],
   creator: "Rizqi Khamami",
   openGraph: {
     type: "website",
@@ -47,7 +47,8 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Rizqi Khamami – IoT, AI Agent & DevSecOps",
-    description: "Technology hobbyist building at the intersection of hardware, automation, and AI.",
+    description:
+      "Technology hobbyist building at the intersection of hardware, automation, and AI.",
     images: ["/og-image.png"],
   },
   robots: {
@@ -68,8 +69,8 @@ const jsonLd = {
   name: "Rizqi Khamami",
   url: "https://rizqikhamami.vercel.app",
   sameAs: [
-    "https://linkedin.com/in/rizqikhamami",
-    "https://github.com/rizqikhamami",
+    "https://www.linkedin.com/in/rizqi-khamami-475a801b3/",
+    "https://github.com/Khamami13",
   ],
   jobTitle: "Technology Hobbyist & Practitioner",
   knowsAbout: [

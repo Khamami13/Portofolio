@@ -1,7 +1,17 @@
 "use client";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowDown, Github, Linkedin, Download, Cpu, Bot, Terminal, Shield } from "lucide-react";
+import {
+  ArrowDown,
+  Github,
+  Linkedin,
+  Download,
+  FileText,
+  Cpu,
+  Bot,
+  Terminal,
+  Shield,
+} from "lucide-react";
 import { useLang } from "@/lib/lang-context";
 import { content } from "@/lib/content";
 
@@ -27,7 +37,10 @@ export default function HeroSection() {
     let timeout: NodeJS.Timeout;
 
     if (!isDeleting && displayed.length < current.length) {
-      timeout = setTimeout(() => setDisplayed(current.slice(0, displayed.length + 1)), 60);
+      timeout = setTimeout(
+        () => setDisplayed(current.slice(0, displayed.length + 1)),
+        60,
+      );
     } else if (!isDeleting && displayed.length === current.length) {
       timeout = setTimeout(() => setIsDeleting(true), 2000);
     } else if (isDeleting && displayed.length > 0) {
@@ -52,7 +65,12 @@ export default function HeroSection() {
           className="absolute text-emerald-500/10 pointer-events-none hidden md:block"
           style={{ left: x, top: y }}
           animate={{ y: [0, -15, 0], rotate: [0, 5, 0] }}
-          transition={{ duration: 5 + delay, repeat: Infinity, delay, ease: "easeInOut" }}
+          transition={{
+            duration: 5 + delay,
+            repeat: Infinity,
+            delay,
+            ease: "easeInOut",
+          }}
         >
           <Icon size={size * 3} strokeWidth={0.8} />
         </motion.div>
@@ -70,7 +88,9 @@ export default function HeroSection() {
           className="inline-flex items-center gap-2 mb-8 px-4 py-2 rounded-full border border-emerald-500/20 bg-emerald-500/5 text-xs font-mono text-emerald-400"
         >
           <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-          {lang === "id" ? "Tersedia untuk kolaborasi" : "Available for collaboration"}
+          {lang === "id"
+            ? "Tersedia untuk kolaborasi"
+            : "Available for collaboration"}
         </motion.div>
 
         {/* Greeting */}
@@ -90,13 +110,11 @@ export default function HeroSection() {
           transition={{ delay: 0.3 }}
           className="font-display text-5xl sm:text-6xl lg:text-7xl font-bold text-white mb-4 leading-tight"
         >
-          {t.hero.name
-            .split(" ")
-            .map((word, i) => (
-              <span key={i} className={i === 1 ? "gradient-text" : ""}>
-                {word}{" "}
-              </span>
-            ))}
+          {t.hero.name.split(" ").map((word, i) => (
+            <span key={i} className={i === 1 ? "gradient-text" : ""}>
+              {word}{" "}
+            </span>
+          ))}
         </motion.h1>
 
         {/* Typewriter role */}
@@ -137,12 +155,11 @@ export default function HeroSection() {
             {t.hero.cta_contact}
           </a>
           <a
-            href="/cv-rizqi-khamami.pdf"
-            download
+            href="/cv-builder"
             className="flex items-center gap-2 text-sm text-gray-400 hover:text-emerald-400 transition-colors font-medium"
           >
-            <Download size={14} />
-            {t.hero.cta_cv}
+            <FileText size={14} />
+            CV Builder
           </a>
         </motion.div>
 
@@ -154,8 +171,16 @@ export default function HeroSection() {
           className="flex items-center justify-center gap-4"
         >
           {[
-            { icon: Github, url: "https://github.com/rizqikhamami", label: "GitHub" },
-            { icon: Linkedin, url: "https://linkedin.com/in/rizqikhamami", label: "LinkedIn" },
+            {
+              icon: Github,
+              url: "https://github.com/Khamami13",
+              label: "GitHub",
+            },
+            {
+              icon: Linkedin,
+              url: "https://www.linkedin.com/in/rizqi-khamami-475a801b3/",
+              label: "LinkedIn",
+            },
           ].map(({ icon: Icon, url, label }) => (
             <a
               key={label}

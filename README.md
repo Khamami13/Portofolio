@@ -2,7 +2,7 @@
 
 > Personal portfolio website dengan dark modern tech design, bilingual Indonesia–English, dan aksen warna emerald/green.
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/rizqikhamami/portfolio)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/Khamami13/portfolio)
 
 ---
 
@@ -50,7 +50,7 @@ src/
 
 ```bash
 # Clone repo
-git clone https://github.com/rizqikhamami/portfolio.git
+git clone https://github.com/Khamami13/portfolio.git
 cd portfolio
 
 # Install dependencies

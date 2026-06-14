@@ -83,7 +83,7 @@ export default function ContactSection() {
             ))}
           </div>
 
-          {/* CV download */}
+          {/* CV Builder */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -94,16 +94,15 @@ export default function ContactSection() {
               <Download size={20} />
             </div>
             <div className="text-center sm:text-left flex-1">
-              <div className="font-display font-semibold text-white mb-1">Curriculum Vitae</div>
-              <div className="text-xs text-gray-500">{t.contact.cv_note}</div>
+              <div className="font-display font-semibold text-white mb-1">CV Builder</div>
+              <div className="text-xs text-gray-500">{lang === "id" ? "Buat CV profesional dengan template modern" : "Create a professional CV with modern templates"}</div>
             </div>
             <a
-              href="/cv-rizqi-khamami.pdf"
-              download
+              href="/cv-builder"
               className="btn-primary flex items-center gap-2 text-sm flex-shrink-0"
             >
               <Download size={14} />
-              {lang === "id" ? "Unduh CV" : "Download CV"}
+              {lang === "id" ? "Buka CV Builder" : "Open CV Builder"}
             </a>
           </motion.div>
         </div>
