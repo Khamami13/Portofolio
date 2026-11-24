@@ -7,6 +7,7 @@ import ProjectsSection from "@/components/sections/ProjectsSection";
 import ExperienceSection from "@/components/sections/ExperienceSection";
 import GitHubSection from "@/components/sections/GitHubSection";
 import ContactSection from "@/components/sections/ContactSection";
+import AdBanner from "@/components/ui/AdBanner";
 import Footer from "@/components/ui/Footer";
 
 export default function Home() {
@@ -28,6 +29,7 @@ export default function Home() {
       <ExperienceSection />
       <GitHubSection />
       <ContactSection />
+      <AdBanner />
       <Footer />
     </main>
   );
